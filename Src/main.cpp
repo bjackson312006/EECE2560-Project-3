@@ -35,7 +35,9 @@ void findMatches(const dictionary& dict, const grid& g, const std::string& outpu
                 int r = i;
                 int c = j;
 
-                while(r >= 0 && r < g.num_rows() && c >= 0 && c < g.num_cols()) {
+                bool first_step = true;
+                while(first_step || r != i || c != j) { //handle at least one cell and loop until it reaches the starting cells
+                    first_step = false;
                     current_word += g.get(r, c);
 
                     if(current_word.length() >= 5) {
@@ -47,6 +49,19 @@ void findMatches(const dictionary& dict, const grid& g, const std::string& outpu
 
                     r += dr[d];
                     c += dc[d];
+
+                    //handle wraparounds
+                    if(r < 0) {
+                        r = g.num_rows() - 1;
+                    } else if(r >= g.num_rows()) {
+                        r = 0;
+                    }
+
+                    if(c < 0) {
+                        c = g.num_cols() - 1;
+                    } else if(c >= g.num_cols()) {
+                        c = 0;
+                    }
                 }
             }
         }
