@@ -1,20 +1,20 @@
 //
 // Brian Mack, Juan Ipina, Blake Jackson, James Su
 // Project #3 Word Search
-// Header for the heap class (max-heap utilities and heapsort for strings)
+// Header for the heap template class (max-heap utilities and heapsort)
 //
 #pragma once
 
 #include <algorithm>
-#include <string>
 #include <vector>
 #include "d_except.h"
 
+template <typename T>
 class heap
 {
     private:
-        std::vector<std::string> _heap_items; // Items stored in the heap
-        int _current_heap_size;               // Number of active heap items
+        std::vector<T> _heap_items; // Items stored in the heap
+        int _current_heap_size;     // Number of active heap items
 
         bool doesIndexExistInCurrentHeap(int index) const
         // Returns true if index is inside the active heap region
@@ -50,7 +50,7 @@ class heap
             return 2 * parent_index + 2;
         }
 
-        std::string getItem(int n) const
+        T getItem(int n) const
         // Returns the nth item in the underlying heap vector
         // assumptions - n is a valid index in the underlying vector
         {
@@ -65,7 +65,7 @@ class heap
             return _heap_items[n];
         }
 
-        void initializeMaxHeap(const std::vector<std::string>& input_items)
+        void initializeMaxHeap(const std::vector<T>& input_items)
         // Copies input_items into the heap and builds a max-heap
         {
             _heap_items = input_items;
@@ -111,7 +111,7 @@ class heap
             }
         }
 
-        std::vector<std::string> heapsort(void)
+        std::vector<T> heapsort(void)
         // Sorts items using heap sort and returns the sorted vector
         {
             int original_heap_size = _current_heap_size;

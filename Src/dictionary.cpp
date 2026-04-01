@@ -73,7 +73,7 @@ void dictionary::sortWordsUsingQuicksortAlgorithm(void)
 void dictionary::sortWordsUsingHeapsortAlgorithm(void)
 {
     /* Sorts _words using the heapsort algorithm */
-    heap dictionary_word_heap;
+    heap<std::string> dictionary_word_heap;
     dictionary_word_heap.initializeMaxHeap(_words);
     _words = dictionary_word_heap.heapsort();
 }
