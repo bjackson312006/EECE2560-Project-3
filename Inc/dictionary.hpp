@@ -17,6 +17,14 @@ class dictionary
     private:
         std::vector<std::string> _words; // Stored dictionary words
 
+        int partitionWordsAroundPivotForQuicksort(
+            int first_index,
+            int last_index);
+        // Partitions words for quicksort using the last item as pivot
+
+        void quicksortWordsInRange(int first_index, int last_index);
+        // Recursively applies quicksort to words in [first_index, last_index]
+
     public:
         void store(const std::string& filename);
         // Reads all words from filename into the dictionary
@@ -24,6 +32,12 @@ class dictionary
 
         void sort(void);
         // Sorts the dictionary words using selection sort
+
+        void sortWordsUsingQuicksortAlgorithm(void);
+        // Sorts dictionary words using the quicksort algorithm
+
+        void sortWordsUsingHeapsortAlgorithm(void);
+        // Sorts dictionary words using the heapsort algorithm
 
         int find(const std::string& target) const;
         // Searches for target using binary search and returns its index

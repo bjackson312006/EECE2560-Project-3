@@ -5,6 +5,7 @@
 // (file loading, selection sort, binary find)
 //
 #include "dictionary.hpp"
+#include "heap.hpp"
 
 void dictionary::store(const string& filename)
 {
@@ -58,6 +59,25 @@ void dictionary::sort(void)
     }
 }
 
+void dictionary::sortWordsUsingQuicksortAlgorithm(void)
+{
+    /* Sorts _words using the quicksort algorithm */
+    if (_words.empty())
+    {
+        return;
+    }
+
+    quicksortWordsInRange(0, static_cast<int>(_words.size()) - 1);
+}
+
+void dictionary::sortWordsUsingHeapsortAlgorithm(void)
+{
+    /* Sorts _words using the heapsort algorithm */
+    heap dictionary_word_heap;
+    dictionary_word_heap.initializeMaxHeap(_words);
+    _words = dictionary_word_heap.heapsort();
+}
+
 int dictionary::find(const std::string& target) const
 {
     /* Searches for target using binary search
@@ -95,6 +115,48 @@ int dictionary::find(const std::string& target) const
      * so return -1.
      */
     return -1;
+}
+
+int dictionary::partitionWordsAroundPivotForQuicksort(
+    int first_index,
+    int last_index)
+{
+    /* Partitions words around a pivot for quicksort and returns pivot index */
+    const std::string pivot_word = _words[last_index];
+    int index_of_smaller_or_equal_region_end = first_index - 1;
+
+    for (
+        int current_index = first_index;
+        current_index < last_index;
+        current_index++)
+    {
+        if (_words[current_index] <= pivot_word)
+        {
+            index_of_smaller_or_equal_region_end++;
+            std::swap(
+                _words[index_of_smaller_or_equal_region_end],
+                _words[current_index]);
+        }
+    }
+
+    int final_pivot_index = index_of_smaller_or_equal_region_end + 1;
+    std::swap(_words[final_pivot_index], _words[last_index]);
+    return final_pivot_index;
+}
+
+void dictionary::quicksortWordsInRange(int first_index, int last_index)
+{
+    /* Recursively applies quicksort to _words in [first_index, last_index] */
+    if (first_index >= last_index)
+    {
+        return;
+    }
+
+    int pivot_index = partitionWordsAroundPivotForQuicksort(
+        first_index,
+        last_index);
+    quicksortWordsInRange(first_index, pivot_index - 1);
+    quicksortWordsInRange(pivot_index + 1, last_index);
 }
 
 std::ostream& operator<<(std::ostream& os, const dictionary& dict)

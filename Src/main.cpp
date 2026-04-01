@@ -6,6 +6,37 @@
 #include "dictionary.hpp"
 #include "grid.hpp"
 
+static const int SELECTION_SORT_SELECTION = 1;
+static const int QUICKSORT_SELECTION = 2;
+static const int HEAPSORT_SELECTION = 3;
+
+void applyRequestedSortingAlgorithmToDictionary(
+    dictionary& dict,
+    int sorting_algorithm_selection)
+/* Runs the selected sorting algorithm on the given dictionary
+ * selected by sorting_algorithm_selection
+ * parameters - dict: dictionary to sort
+ *              sorting_algorithm_selection: numeric sort choice
+ */
+{
+    if (sorting_algorithm_selection == SELECTION_SORT_SELECTION)
+    {
+        dict.sort();
+    }
+    else if (sorting_algorithm_selection == QUICKSORT_SELECTION)
+    {
+        dict.sortWordsUsingQuicksortAlgorithm();
+    }
+    else if (sorting_algorithm_selection == HEAPSORT_SELECTION)
+    {
+        dict.sortWordsUsingHeapsortAlgorithm();
+    }
+    else
+    {
+        throw rangeError("Invalid sorting algorithm selection");
+    }
+}
+
 void findMatches(
     const dictionary& dict, const grid& g, const std::string& output_file)
 {
@@ -96,11 +127,12 @@ void findMatches(
     }
 }
 
-void search(void)
+void search(int sorting_algorithm_selection)
 {
-    /* Runs the full Word Search flow
+    /* Runs the full Word Search flow for a selected sorting algorithm
      * reads grid file name, loads dictionary/grid, sorts dictionary,
      * and writes all found matches
+     * parameters - sorting_algorithm_selection: numeric sort choice
      */
     std::string grid_file;
     std::string dictionary_file = "Dictionary.txt";
@@ -111,17 +143,24 @@ void search(void)
     grid g;
     dict.store(dictionary_file);
     g.read_grid(grid_file);
-    dict.sort();
+    applyRequestedSortingAlgorithmToDictionary(
+        dict,
+        sorting_algorithm_selection);
     findMatches(dict, g, output_file);
     std::cout << "Search complete. Results written to " << output_file << '\n';
 }
 
 int main()
 {
-    /* Runs search() */
+    /* Runs search() with a user selected sorting algorithm */
     try
     {
-        search();
+        int sorting_algorithm_selection = SELECTION_SORT_SELECTION;
+        std::cout
+            << "Choose sorting algorithm "
+            << "(1=selection, 2=quicksort, 3=heapsort): ";
+        std::cin >> sorting_algorithm_selection;
+        search(sorting_algorithm_selection);
     }
     catch (const baseException& e)
     {
